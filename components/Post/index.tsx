@@ -1,3 +1,4 @@
+import { format, formatDistance } from "date-fns";
 import Image from "next/image";
 import { useState } from "react";
 import DEFAULT_AVATAR from "../../assets/avatar.webp";
@@ -20,7 +21,11 @@ export function PostTitle(props: PostTitleType) {
 
         <div className="flex flex-col">
           <strong>{props.user}</strong>
-          <span className="text-gray-400 text-sm">{props.date}</span>
+          <span className="text-gray-400 text-sm">
+            {formatDistance(Date.parse(props.date), Date.now(), {
+              includeSeconds: true,
+            })}
+          </span>
         </div>
       </div>
 
@@ -82,7 +87,7 @@ export function PostContent(props: PostContentProps) {
 
       <div className="absolute bottom-0 w-full flex justify-center">
         <div
-          className="w-[200px] h-[100px] bg-gray-200 rounded-bl-full rounded-br-full rotate-180 flex items-center justify-center cursor-pointer"
+          className="w-[10rem] h-[5rem] bg-gray-200 rounded-bl-full rounded-br-full rotate-180 flex items-center justify-center cursor-pointer"
           onClick={props.onLike}
         >
           <svg
