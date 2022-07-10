@@ -1,49 +1,85 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import axios, { AxiosRequestConfig } from "axios";
-import { ApiPostType } from "store/api/types";
-import { URLSearchParams } from "url";
+import { Post, PrismaClient } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const cmsToken =
-  "99d78724a7b3e8daffd1cee5f809815b0fc89794141973c09e1720cc7a2ef7e671189f41e7b89954f819ab28e7a18d3e489966fedfffa378fafbd075ba28dab168d16a542b65610eeadb02123a2b53afd6c4c4dd57ee44444564debfcc54af90794554ba77fd9bd3cdcfb0dc193afa92257ef7f9cdacdef99b421a51567c6b06";
+export interface CustomPostType extends Post {
+  likes: number;
+  views: number;
+}
 
-const cmsConfig: AxiosRequestConfig = {
-  baseURL: "http://localhost:1337/api",
-  headers: {
-    Authorization: `Bearer ${cmsToken}`,
-  },
-};
+async function getHandler(
+  req: NextApiRequest,
+  res: NextApiResponse<CustomPostType[]>
+) {
+  const prismaClient = new PrismaClient();
 
-export default async function handler(req, res) {
-  let response: ApiPostType[] = [];
+  const posts = await prismaClient.post.findMany({
+    include: {
+      user: true,
+      UserPost: {
+        select: {
+          liked: true,
+          viewed: true,
+          user_id: true,
+        },
+      },
+    },
+  });
 
-  try {
-    const query = new URLSearchParams({
-      populate: ["account", "user-post"],
-      sort: "id:desc",
-    });
+  const addLikeViewFields = posts.map<CustomPostType>((post) => ({
+    ...post,
+    likes: post.UserPost.filter((post) => post.liked).length,
+    views: post.UserPost.filter((post) => post.liked).length,
+    liked: !!post.UserPost.find(
+      (post) => post.liked && post.user_id == req.headers.authorization
+    ),
+  }));
 
-    const cmsResponse = await axios.get(
-      `/posts?${query.toString()}`,
-      cmsConfig
-    );
+  if (posts) res.status(200).send(addLikeViewFields);
+  else res.status(404).send([]);
+}
 
-    console.log(cmsResponse.data.data);
+async function postHandler(req: NextApiRequest, res: NextApiResponse<Post>) {
+  const { title } = req.body;
+  const userId = req.headers.authorization;
 
-    cmsResponse.data.data.map((post) => {
-      response.push({
-        title: post.attributes.title,
-        date: post.attributes.createdAt,
-        user: post.attributes.account.data.attributes.name,
-        liked: false,
-        likes: 0,
-        views: 0,
-        id: post.id,
-      });
-    });
-  } catch (err) {
-    console.log(err);
+  const prismaClient = new PrismaClient();
+  console.log(title, userId);
+
+  const user = prismaClient.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!user) return res.status(404).end();
+
+  const post = await prismaClient.post.create({
+    data: {
+      title,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
+  });
+
+  if (post) return res.status(200).send(post);
+  else return res.status(400).end();
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  switch (req.method) {
+    case "POST":
+      return await postHandler(req, res);
+    case "GET":
+      return await getHandler(req, res);
+    default:
+      return res.status(404).end();
   }
-
-  res.status(200).json(response);
 }

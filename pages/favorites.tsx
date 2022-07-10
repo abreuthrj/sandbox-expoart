@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Menu, Post } from "components";
 import { useEffect, useState } from "react";
-import { apiGetPosts } from "store/api/index";
+import { apiGetFavorites } from "store/api/index";
 import { ApiPostType } from "store/api/types";
 import { useStoreSelector } from "store/index";
 import { useRouter } from "next/router";
@@ -16,7 +16,7 @@ export default function Home() {
   useEffect(() => {
     if (!id) router.replace("/login");
 
-    apiGetPosts()
+    apiGetFavorites()
       .then((res) => {
         setPosts(res.data);
         console.log(res);
@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <div className="py-8">
       <Head>
-        <title>Expoart - Home</title>
+        <title>ExpoArt ~ Favorites</title>
       </Head>
 
       <div className="flex flex-col items-center justify-center max-w-4xl mx-auto">
@@ -37,7 +37,7 @@ export default function Home() {
           <Post
             user={post.user}
             date={post.date}
-            liked={post.liked}
+            liked={true}
             likes={post.likes}
             title={post.title}
             views={post.views}

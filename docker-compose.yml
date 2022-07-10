@@ -1,0 +1,11 @@
+version: "3.1"
+
+services:
+  db:
+    container_name: expoart-db
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=root-password

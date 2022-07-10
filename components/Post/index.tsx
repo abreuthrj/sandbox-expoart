@@ -1,12 +1,14 @@
+import { User } from "@prisma/client";
 import { format, formatDistance } from "date-fns";
 import Image from "next/image";
 import { useState } from "react";
+import { apiLikePost } from "store/api/index";
 import DEFAULT_AVATAR from "../../assets/avatar.webp";
 import DEFAULT_POST from "../../assets/sunflowers.webp";
 
 export type PostTitleType = {
   avatar?: string;
-  user: string;
+  user: User;
   date: string;
   title: string;
 };
@@ -20,7 +22,7 @@ export function PostTitle(props: PostTitleType) {
         </div>
 
         <div className="flex flex-col">
-          <strong>{props.user}</strong>
+          <strong>{props.user.name}</strong>
           <span className="text-gray-400 text-sm">
             {formatDistance(Date.parse(props.date), Date.now(), {
               includeSeconds: true,
@@ -108,17 +110,26 @@ export function PostContent(props: PostContentProps) {
 export type PostProps = {
   title: string;
   date: string;
-  user: string;
+  user: User;
   liked: boolean;
   likes: number;
   views: number;
+  id: string;
 };
 
 export default function Post(props: PostProps) {
   const [liked, setLiked] = useState(props.liked);
 
-  const handleLike = () => {
-    setLiked(!liked);
+  const handleLike = async () => {
+    let prevState = liked;
+    setLiked(!prevState);
+
+    try {
+      await apiLikePost(props.id, !prevState);
+    } catch (err) {
+      setLiked(prevState);
+      console.log(err);
+    }
   };
 
   return (
