@@ -40,4 +40,12 @@ export const apiGetFavorites = () =>
   });
 
 export const apiCreatePost = (title: string) =>
-  axios.post("/api/posts", { title });
+  axios.post(
+    "/api/posts",
+    { title },
+    {
+      headers: {
+        Authorization: getUserId(),
+      },
+    }
+  );

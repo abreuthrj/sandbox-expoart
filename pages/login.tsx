@@ -59,7 +59,7 @@ export default function () {
             className="bg-purple-600 text-white p-2 mt-6 font-bold hover:bg-purple-700 transition-colors cursor-pointer"
           />
           <input
-            onClick={() => router.back()}
+            onClick={() => router.push("/signup")}
             type="submit"
             value="Singnup"
             className="bg-gray-100 text-gray-400 p-2 hover:bg-gray-200 transition-colors cursor-pointer"
