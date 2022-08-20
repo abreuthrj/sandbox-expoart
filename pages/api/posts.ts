@@ -15,9 +15,6 @@ async function getHandler(
   const prismaClient = new PrismaClient();
 
   const posts = await prismaClient.post.findMany({
-    orderBy: {
-      id: "desc",
-    },
     include: {
       user: true,
       UserPost: {

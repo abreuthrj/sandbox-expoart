@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { apiSignup } from "store/api/index";
 import { userStoreSignin } from "store/reducers/User";
 
-export default function () {
+export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -6,7 +6,7 @@ import { ApiPostType } from "store/api/types";
 import { useStoreSelector } from "store/index";
 import { useRouter } from "next/router";
 
-export default function Home() {
+export default function Favorites() {
   const { id } = useStoreSelector((state) => state.User);
   const router = useRouter();
 

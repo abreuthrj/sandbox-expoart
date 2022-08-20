@@ -1,34 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Expoart is a social media project developed to allow artists to display and get acknowledged for their work.
 
-## Getting Started
+## Summary
 
-First, run the development server:
+1. [Configuration](#configuration)
+2. [Running locally](#running-on-your-machine)
+
+## Configuration
+
+This project counts on a `.env` file containing the database configuration. Take a look at `.env.example` file to create your own configurations. ( In case of driver changes, don't forget to change `prisma/schema.prisma` provider )
+
+<table>
+<tr>
+<td>Framework</td>
+<td>NextJS</td>
+<td>CSS</td>
+<td>TailwindCSS</td>
+<td>Database Framework</td>
+<td>Prisma</td>
+<td>Database Driver</td>
+<td>MySQL</td>
+<td>DevOps</td>
+<td>Docker</td>
+</tr>
+</table>
+
+## Running on your machine
+
+First of all you will need to install Docker.
+
+Once docker is installed, you can run the following commands to run your project locally
 
 ```bash
-npm run dev
-# or
+docker-compose up -d
+yarn
+yarn migrate
 yarn dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

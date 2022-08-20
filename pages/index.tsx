@@ -34,16 +34,7 @@ export default function Home() {
 
       <div className="flex flex-col items-center justify-center max-w-4xl mx-auto">
         {posts.map((post) => (
-          <Post
-            user={post.user}
-            date={post.date}
-            liked={post.liked}
-            likes={post.likes}
-            title={post.title}
-            views={post.views}
-            id={post.id}
-            key={post.id}
-          />
+          <Post key={post.id} {...post} />
         ))}
       </div>
 

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { apiAuth } from "store/api/index";
 import { userStoreSignin } from "store/reducers/User";
 
-export default function () {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -61,7 +61,7 @@ export default function () {
           <input
             onClick={() => router.push("/signup")}
             type="submit"
-            value="Singnup"
+            value="Signup"
             className="bg-gray-100 text-gray-400 p-2 hover:bg-gray-200 transition-colors cursor-pointer"
           />
         </form>
