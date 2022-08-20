@@ -10,18 +10,26 @@ Expoart is a social media project developed to allow artists to display and get 
 This project counts on a `.env` file containing the database configuration. Take a look at `.env.example` file to create your own configurations. ( In case of driver changes, don't forget to change `prisma/schema.prisma` provider )
 
 <table>
-<tr>
-<td>Framework</td>
-<td>NextJS</td>
-<td>CSS</td>
-<td>TailwindCSS</td>
-<td>Database Framework</td>
-<td>Prisma</td>
-<td>Database Driver</td>
-<td>MySQL</td>
-<td>DevOps</td>
-<td>Docker</td>
-</tr>
+  <tr>
+    <td>Framework</td>
+    <td>NextJS</td>
+  </tr>
+  <tr>
+    <td>CSS</td>
+    <td>TailwindCSS</td>
+  </tr>
+  <tr>
+    <td>Database Framework</td>
+    <td>Prisma</td>
+  </tr>
+  <tr>
+    <td>Database Driver</td>
+    <td>MySQL</td>
+  </tr>
+  <tr>
+    <td>DevOps</td>
+    <td>Docker</td>
+  </tr>
 </table>
 
 ## Running on your machine
