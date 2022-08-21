@@ -1,8 +1,9 @@
+import { AxiosError } from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { MdImage } from "react-icons/md";
-import { apiCreatePost } from "store/api/index";
+import { apiCreatePost, ApiHandleError } from "store/api/index";
 
 export default function Post() {
   const router = useRouter();
@@ -18,7 +19,12 @@ export default function Post() {
       console.log(data);
       router.push("/");
     } catch (err) {
-      console.log(err);
+      if ((err as AxiosError).response?.status == 401) {
+        window.localStorage.removeItem("token");
+        router.push("/login");
+      }
+
+      ApiHandleError(err);
     }
   };
 

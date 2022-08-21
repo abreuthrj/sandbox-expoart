@@ -2,6 +2,8 @@
 
 import { Post, PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
+import jwt, { JsonWebTokenError, Jwt, JwtPayload } from "jsonwebtoken";
+import { ErrorType } from "store/api/types";
 
 export interface CustomPostType extends Post {
   likes: number;
@@ -10,64 +12,88 @@ export interface CustomPostType extends Post {
 
 async function getHandler(
   req: NextApiRequest,
-  res: NextApiResponse<CustomPostType[]>
+  res: NextApiResponse<CustomPostType[] | ErrorType>
 ) {
-  const prismaClient = new PrismaClient();
+  try {
+    const { id } = jwt.verify(
+      req.headers.authorization.split(" ")[1],
+      process.env.JWT_SECRET
+    ) as JwtPayload;
 
-  const posts = await prismaClient.post.findMany({
-    include: {
-      user: true,
-      UserPost: {
-        select: {
-          liked: true,
-          viewed: true,
-          user_id: true,
+    const prismaClient = new PrismaClient();
+
+    const posts = await prismaClient.post.findMany({
+      include: {
+        user: true,
+        UserPost: {
+          select: {
+            liked: true,
+            viewed: true,
+            user_id: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  const addLikeViewFields = posts.map<CustomPostType>((post) => ({
-    ...post,
-    likes: post.UserPost.filter((post) => post.liked).length,
-    views: post.UserPost.filter((post) => post.liked).length,
-    liked: !!post.UserPost.find(
-      (post) => post.liked && post.user_id == req.headers.authorization
-    ),
-  }));
+    const addLikeViewFields = posts.map<CustomPostType>((post) => ({
+      ...post,
+      likes: post.UserPost.filter((post) => post.liked).length,
+      views: post.UserPost.filter((post) => post.liked).length,
+      liked: !!post.UserPost.find((post) => post.liked && post.user_id == id),
+    }));
 
-  if (posts) res.status(200).send(addLikeViewFields);
-  else res.status(404).send([]);
+    res.status(200).send(addLikeViewFields);
+  } catch (err) {
+    if (err instanceof JsonWebTokenError) {
+      console.log(err);
+
+      res.status(401).send({
+        error: true,
+        message: "Unauthorized",
+      });
+
+      return;
+    }
+
+    res.status(404).send({
+      error: true,
+      message: err.message || "Unable to fetch posts",
+    });
+  }
 }
 
-async function postHandler(req: NextApiRequest, res: NextApiResponse<Post>) {
+async function postHandler(
+  req: NextApiRequest,
+  res: NextApiResponse<Post | ErrorType>
+) {
   const { title } = req.body;
-  const userId = req.headers.authorization;
 
-  const prismaClient = new PrismaClient();
-  console.log(title, userId);
+  try {
+    const { id } = jwt.verify(
+      req.headers.authorization.split(" ")[1],
+      process.env.JWT_SECRET
+    ) as JwtPayload;
 
-  const user = prismaClient.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
+    const prismaClient = new PrismaClient();
 
-  if (!user) return res.status(404).end();
-
-  const post = await prismaClient.post.create({
-    data: {
-      title,
-      user: {
-        connect: {
-          id: userId,
+    const post = await prismaClient.post.create({
+      data: {
+        title,
+        user: {
+          connect: {
+            id,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (post) return res.status(200).send(post);
-  else return res.status(400).end();
+    res.status(200).send(post);
+  } catch (err) {
+    return res.status(401).send({
+      error: true,
+      message: err.message || "You must be authenticated for this",
+    });
+  }
 }
 
 export default async function handler(

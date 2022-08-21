@@ -32,7 +32,13 @@ export default function Post({
       <div className="flex items-center justify-between w-full">
         <div className="flex gap-3">
           <div className="rounded-full overflow-hidden w-12 h-12 shadow-md">
-            <Image src="/avatar.webp" alt="Avatar" objectFit="cover" />
+            <Image
+              src="/avatar.webp"
+              alt="Avatar"
+              objectFit="cover"
+              width="100%"
+              height="100%"
+            />
           </div>
 
           <div className="flex flex-col">
@@ -58,6 +64,8 @@ export default function Post({
         <Image
           src="/sunflowers.webp"
           alt={title}
+          width="100%"
+          height="100%"
           objectFit="cover"
           layout="responsive"
         />

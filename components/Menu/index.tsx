@@ -15,6 +15,7 @@ export default function Menu() {
 
   const handleSignout = () => {
     dispatch(userStoreSignout());
+    localStorage.removeItem("token");
     router.push("/login");
   };
 

@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { apiSignup } from "store/api/index";
+import { ApiHandleError, apiSignup } from "store/api/index";
 import { userStoreSignin } from "store/reducers/User";
 
 export default function Signup() {
@@ -32,7 +32,7 @@ export default function Signup() {
       dispatch(userStoreSignin(data));
       router.push("/");
     } catch (err) {
-      console.log(err);
+      ApiHandleError(err);
     }
   };
 

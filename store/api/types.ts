@@ -9,3 +9,9 @@ export type ApiPostType = {
   liked: boolean;
   id: string;
 };
+
+export interface ErrorType {
+  error: boolean;
+  message: string;
+  details?: string;
+}

@@ -1,31 +1,29 @@
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const prismaClient = new PrismaClient();
-  const postId =
-    typeof req.query.postId == "string"
-      ? req.query.postId
-      : req.query.postId[0];
-  const userId = req.headers.authorization;
-  const like = req.body.like;
-
-  if (
-    !(await prismaClient.user.findFirst({
-      where: {
-        id: userId,
-      },
-    }))
-  )
-    return res.status(401).send(null);
-
   try {
+    const { id } = jwt.verify(
+      req.headers.authorization.split(" ")[1],
+      process.env.JWT_SECRET
+    ) as JwtPayload;
+
+    const prismaClient = new PrismaClient();
+
+    const postId =
+      typeof req.query.postId == "string"
+        ? req.query.postId
+        : req.query.postId[0];
+
+    const like = req.body.like;
+
     const relation = await prismaClient.userPost.findFirst({
       where: {
-        user_id: userId,
+        user_id: id,
         post_id: postId,
       },
     });
@@ -46,15 +44,16 @@ export default async function handler(
           liked: like,
           viewed: true,
           post_id: postId,
-          user_id: userId,
+          user_id: id,
         },
       });
 
     res.status(200).send(null);
   } catch (err) {
-    res.status(400).send({
-      success: false,
-      message: err,
+    res.status(404).send({
+      error: true,
+      message: "Unable to interact with post",
+      details: JSON.stringify(err),
     });
   }
 }

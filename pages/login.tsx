@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { apiAuth } from "store/api/index";
+import { apiAuth, ApiHandleError } from "store/api/index";
 import { userStoreSignin } from "store/reducers/User";
 
 export default function Login() {
@@ -20,9 +20,10 @@ export default function Login() {
 
       console.log(data);
       dispatch(userStoreSignin(data));
+      localStorage.setItem("token", data.access_token);
       router.push("/");
     } catch (err) {
-      console.log(err);
+      ApiHandleError(err);
     }
   };
 

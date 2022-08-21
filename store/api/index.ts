@@ -1,13 +1,15 @@
 import { User } from "@prisma/client";
-import axios from "axios";
-import store from "store/index";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import { ErrorType } from "./types";
 
-const getUserId = () => store.getState().User.id;
+const getAuthToken = () => `Bearer ${localStorage.getItem("token")}`;
 
 export const apiGetPosts = () =>
   axios.get("/api/posts", {
     headers: {
-      Authorization: getUserId(),
+      Authorization: getAuthToken(),
     },
   });
 
@@ -20,7 +22,7 @@ export const apiLikePost = (post: string, like: boolean) =>
     { like },
     {
       headers: {
-        Authorization: getUserId(),
+        Authorization: getAuthToken(),
       },
     }
   );
@@ -35,7 +37,7 @@ export const apiSignup = (name: string, email: string, password: string) =>
 export const apiGetFavorites = () =>
   axios.get("/api/posts/favorites", {
     headers: {
-      Authorization: getUserId(),
+      Authorization: getAuthToken(),
     },
   });
 
@@ -45,7 +47,34 @@ export const apiCreatePost = (title: string) =>
     { title },
     {
       headers: {
-        Authorization: getUserId(),
+        Authorization: getAuthToken(),
       },
     }
   );
+
+export const ApiHandleError = (err: AxiosError<ErrorType>) => {
+  console.log(err);
+
+  if (err.response) {
+    if (err.response.status == 401) {
+      toast("You must be authenticated", { type: "error" });
+      return;
+    }
+
+    if (err.response.status == 404) {
+      toast("Not found", { type: "error" });
+      return;
+    }
+
+    toast("An error ocurred", { type: "error" });
+    return;
+  }
+
+  if (err.request) {
+    toast("An error ocurred, check your connection and try again", {
+      type: "error",
+    });
+
+    return;
+  }
+};
