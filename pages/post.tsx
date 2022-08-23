@@ -34,7 +34,7 @@ export default function Post() {
         <title>Expoart - Post</title>
       </Head>
 
-      <div className="flex items-center justify-center h-full">
+      <main className="flex items-center justify-center h-full">
         <form
           onSubmit={handleSubmit}
           className="w-full max-w-[500px] py-8 px-12 border-2 bg-white flex flex-col gap-4"
@@ -67,7 +67,7 @@ export default function Post() {
             onClick={() => router.back()}
           />
         </form>
-      </div>
+      </main>
     </>
   );
 }

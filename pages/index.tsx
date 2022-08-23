@@ -25,11 +25,11 @@ export default function Home() {
         <title>Expoart - Home</title>
       </Head>
 
-      <div className="flex flex-col items-center justify-center max-w-4xl mx-auto">
+      <main className="flex flex-col items-center justify-center max-w-4xl mx-auto px-4 sm:px-0">
         {posts.map((post) => (
           <Post key={post.id} {...post} />
         ))}
-      </div>
+      </main>
 
       <Menu />
     </div>

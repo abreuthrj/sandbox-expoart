@@ -29,7 +29,7 @@ export default function Post({
 
   return (
     <div className="w-full mx-[16%] my-12">
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-between w-full flex-wrap">
         <div className="flex gap-3">
           <div className="rounded-full overflow-hidden w-12 h-12 shadow-md">
             <Image
@@ -52,10 +52,11 @@ export default function Post({
           </div>
         </div>
 
-        <div>
+        <div className="flex flex-col items-end ml-auto sm:flex-row">
           <span className="text-gray-400 text-bold text-sm mr-2">
             this art is called
           </span>
+
           <strong className="text-3xl">{title}</strong>
         </div>
       </div>

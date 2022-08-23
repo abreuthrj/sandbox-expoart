@@ -33,7 +33,7 @@ export default function Login() {
         <title>Expoart - Signin</title>
       </Head>
 
-      <div className="h-full flex items-center justify-center">
+      <main className="h-full flex items-center justify-center">
         <form
           onSubmit={handleSubmit}
           className="w-full max-w-[500px] py-8 px-12 border-2 bg-white flex flex-col gap-4"
@@ -66,7 +66,7 @@ export default function Login() {
             className="bg-gray-100 text-gray-400 p-2 hover:bg-gray-200 transition-colors cursor-pointer"
           />
         </form>
-      </div>
+      </main>
     </>
   );
 }

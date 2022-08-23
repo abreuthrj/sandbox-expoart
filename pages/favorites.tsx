@@ -23,7 +23,7 @@ export default function Favorites() {
         <title>ExpoArt ~ Favorites</title>
       </Head>
 
-      <div className="flex flex-col items-center justify-center max-w-4xl mx-auto">
+      <div className="flex flex-col items-center justify-center max-w-4xl mx-auto px-4 sm:px-4">
         {posts.map((post) => (
           <Post
             user={post.user}

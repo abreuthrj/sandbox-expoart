@@ -40,7 +40,10 @@ export default function Menu() {
         >
           <MdOutlineAddPhotoAlternate size={14} />
         </li>
-        <li className="w-6 h-6 flex items-center justify-center rounded-full cursor-pointer">
+        <li
+          onClick={() => router.push("/profile")}
+          className="w-6 h-6 flex items-center justify-center rounded-full cursor-pointer"
+        >
           <MdPerson size={24} />
         </li>
         <li
