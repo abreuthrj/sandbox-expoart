@@ -2,22 +2,26 @@ import { prisma, PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorType } from "store/api/types";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<User | ErrorType>
 ) {
-  if (req.method !== "POST") return res.status(400).send(null);
-
-  const { name, email, password } = req.body;
-  const prismaClient = new PrismaClient();
-
   try {
+    if (req.method !== "POST") throw "Method not supported";
+
+    const { name, email, password } = req.body;
+    const prismaClient = new PrismaClient();
+
+    const hash = await bcrypt.hash(password, 16);
+
     const user = await prismaClient.user.create({
       data: {
         name,
         email,
         access_token: "Temporary Token",
+        password: hash,
       },
     });
 
