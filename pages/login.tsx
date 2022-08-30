@@ -5,25 +5,33 @@ import { useDispatch } from "react-redux";
 import { apiAuth, ApiHandleError } from "store/api/index";
 import { userStoreSignin } from "store/reducers/User";
 
+const initialFormState = {
+  email: "",
+  password: "",
+  loading: false,
+};
+
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [{ email, password, loading }, setForm] = useState(initialFormState);
 
   const router = useRouter();
   const dispatch = useDispatch();
 
   const handleSubmit = async (evt: FormEvent) => {
     evt.preventDefault();
+    setForm((prevState) => ({ ...prevState, loading: true }));
 
     try {
       const { data } = await apiAuth(email, password);
-
       console.log(data);
-      dispatch(userStoreSignin(data));
+
       localStorage.setItem("token", data.access_token);
+
       router.push("/");
     } catch (err) {
       ApiHandleError(err);
+    } finally {
+      setForm((prevState) => ({ ...prevState, loading: false }));
     }
   };
 
@@ -45,19 +53,30 @@ export default function Login() {
             className="p-4 bg-gray-50 outline-none"
             name="email"
             placeholder="E-mail"
-            onChange={(evt) => setEmail(evt.target.value)}
+            onChange={(evt) =>
+              setForm((prevState) => ({
+                ...prevState,
+                email: evt.target.value,
+              }))
+            }
           />
           <input
             className="p-4 bg-gray-50 outline-none"
             name="password"
             type="password"
             placeholder="Password"
-            onChange={(evt) => setPassword(evt.target.value)}
+            onChange={(evt) =>
+              setForm((prevState) => ({
+                ...prevState,
+                password: evt.target.value,
+              }))
+            }
           />
           <input
             type="submit"
             value="Signin"
-            className="bg-purple-600 text-white p-2 mt-6 font-bold hover:bg-purple-700 transition-colors cursor-pointer"
+            disabled={loading}
+            className="bg-purple-600 text-white p-2 mt-6 font-bold hover:bg-purple-700 transition-colors cursor-pointer disabled:bg-purple-400"
           />
           <input
             onClick={() => router.push("/signup")}

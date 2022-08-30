@@ -53,7 +53,7 @@ export const apiCreatePost = (title: string) =>
   );
 
 export const apiFetchUserFromToken = (token: string) =>
-  axios.get(`/api/userFromToken/${token}`);
+  axios.get<User>(`/api/userFromToken/${token}`);
 
 export const ApiHandleError = (err: AxiosError<ErrorType>) => {
   console.log(err);
@@ -65,7 +65,7 @@ export const ApiHandleError = (err: AxiosError<ErrorType>) => {
     }
 
     if (err.response.status == 404) {
-      toast("Not found", { type: "error" });
+      toast("Not Found", { type: "error" });
       return;
     }
 

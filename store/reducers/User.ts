@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "@prisma/client";
 
-const initialState: User = {
+const initialState: Partial<User> = {
   name: null,
   access_token: null,
   email: null,

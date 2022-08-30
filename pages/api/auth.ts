@@ -2,21 +2,28 @@ import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import { ErrorType } from "store/api/types";
+import bcrypt from "bcrypt";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<User | ErrorType>
 ) {
-  if (req.method !== "POST") return res.status(400).send(null);
-
-  const prismaClient = new PrismaClient();
-
   try {
+    if (req.method !== "POST") throw "User not found";
+
+    const prismaClient = new PrismaClient();
+
     const user = await prismaClient.user.findFirst({
       where: {
         email: req.body.email,
       },
     });
+
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!validPassword) throw "Invalid password";
 
     const newToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
