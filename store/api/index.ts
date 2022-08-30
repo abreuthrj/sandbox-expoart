@@ -52,6 +52,9 @@ export const apiCreatePost = (title: string) =>
     }
   );
 
+export const apiFetchUserFromToken = (token: string) =>
+  axios.get(`/api/userFromToken/${token}`);
+
 export const ApiHandleError = (err: AxiosError<ErrorType>) => {
   console.log(err);
 
