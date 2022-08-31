@@ -3,7 +3,7 @@
 import { Post, PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt, { JsonWebTokenError, Jwt, JwtPayload } from "jsonwebtoken";
-import { ErrorType } from "store/api/types";
+import { ErrorType } from "../../store/api/types";
 
 export interface CustomPostType extends Post {
   likes: number;

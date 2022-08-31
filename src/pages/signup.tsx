@@ -3,8 +3,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ApiHandleError, apiSignup } from "store/api/index";
-import { userStoreSignin } from "store/reducers/User";
+import { ApiHandleError, apiSignup } from "../store/api/index";
+import { userStoreSignin } from "../store/reducers/User";
 
 const initialFormState = {
   name: "",
@@ -12,42 +12,39 @@ const initialFormState = {
   password: "",
   confirmPassword: "",
   failedField: null,
+  loading: false,
 };
 
 export default function Signup() {
-  const [{ name, email, password, confirmPassword, failedField }, setForm] =
-    useState(initialFormState);
+  const [
+    { name, email, password, confirmPassword, failedField, loading },
+    setForm,
+  ] = useState(initialFormState);
 
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const handleSubmit = async (evt: FormEvent) => {
     evt.preventDefault();
     setForm((prevState) => ({
       ...prevState,
       failedField: null,
+      loading: true,
     }));
 
-    if (!name)
-      return setForm((prevState) => ({
-        ...prevState,
-        failedField: "name",
-      }));
-    if (!email)
-      return setForm((prevState) => ({
-        ...prevState,
-        failedField: "email",
-      }));
-    if (password.length < 8)
-      return setForm((prevState) => ({
-        ...prevState,
-        failedField: "password",
-      }));
-    if (password !== confirmPassword)
-      return setForm((prevState) => ({
-        ...prevState,
-        failedField: "confirmPassword",
-      }));
+    let validation = {
+      name,
+      email: email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/),
+      password: password.length >= 6,
+      confirmPassword: password === confirmPassword,
+    };
+
+    for (let field in validation)
+      if (!validation[field])
+        return setForm((prevState) => ({
+          ...prevState,
+          failedField: field,
+          loading: false,
+        }));
 
     try {
       const { data } = await apiSignup(name, email, password);
@@ -57,6 +54,8 @@ export default function Signup() {
       router.push("/");
     } catch (err) {
       ApiHandleError(err);
+    } finally {
+      setForm((prevState) => ({ ...prevState, loading: false }));
     }
   };
 
@@ -132,7 +131,8 @@ export default function Signup() {
           <input
             type="submit"
             value="Signup"
-            className="bg-purple-600 text-white p-2 mt-6 font-bold hover:bg-purple-700 transition-colors cursor-pointer"
+            disabled={loading}
+            className="bg-purple-600 text-white p-2 mt-6 font-bold hover:bg-purple-700 transition-colors cursor-pointer disabled:bg-purple-300"
           />
           <input
             onClick={() => router.back()}

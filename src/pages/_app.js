@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import { Provider, useDispatch } from "react-redux";
-import store from "../store/index";
+import store from "../store";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { apiFetchUserFromToken } from "../store/api";

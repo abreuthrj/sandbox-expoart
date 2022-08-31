@@ -7,7 +7,7 @@ import {
   MdLogout,
 } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { userStoreSignout } from "store/reducers/User";
+import { userStoreSignout } from "../../store/reducers/User";
 
 export default function Menu() {
   const dispatch = useDispatch();

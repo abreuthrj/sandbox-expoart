@@ -16,8 +16,8 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "components": ["./components/index.js"],
-      "pages/*": ["./pages/*"]
+      "components": ["./src/components/index.js"],
+      "pages/*": ["./src/pages/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

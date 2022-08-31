@@ -1,9 +1,9 @@
 import Head from "next/head";
 import { Menu, Post } from "components";
 import { useEffect, useState } from "react";
-import { apiGetPosts, ApiHandleError } from "store/api/index";
-import { ApiPostType } from "store/api/types";
-import { useStoreSelector } from "store/index";
+import { apiGetPosts, ApiHandleError } from "../store/api";
+import { ApiPostType } from "../store/api/types";
+import { useStoreSelector } from "../store";
 import { useRouter } from "next/router";
 
 export default function Home() {

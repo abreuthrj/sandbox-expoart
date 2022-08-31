@@ -2,8 +2,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { apiAuth, ApiHandleError } from "store/api/index";
-import { userStoreSignin } from "store/reducers/User";
+import { apiAuth, ApiHandleError } from "../store/api/";
+import { userStoreSignin } from "../store/reducers/User";
 
 const initialFormState = {
   email: "",
@@ -80,7 +80,7 @@ export default function Login() {
           />
           <input
             onClick={() => router.push("/signup")}
-            type="submit"
+            type="button"
             value="Signup"
             className="bg-gray-100 text-gray-400 p-2 hover:bg-gray-200 transition-colors cursor-pointer"
           />

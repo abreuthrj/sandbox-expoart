@@ -1,6 +1,6 @@
 import { prisma, PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { ErrorType } from "store/api/types";
+import { ErrorType } from "../../store/api/types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 

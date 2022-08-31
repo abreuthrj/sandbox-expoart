@@ -1,8 +1,8 @@
 import { formatDistance } from "date-fns";
 import Image from "next/image";
 import { useState } from "react";
-import { apiLikePost } from "store/api/index";
-import { ApiPostType } from "store/api/types";
+import { apiLikePost } from "../../store/api/index";
+import { ApiPostType } from "../../store/api/types";
 import { FaHeart } from "react-icons/fa";
 
 export default function Post({

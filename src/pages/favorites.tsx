@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { Menu, Post } from "components";
 import { useEffect, useState } from "react";
-import { apiGetFavorites, ApiHandleError } from "store/api/index";
-import { ApiPostType } from "store/api/types";
+import { apiGetFavorites, ApiHandleError } from "../store/api";
+import { ApiPostType } from "../store/api/types";
 
 export default function Favorites() {
   const [posts, setPosts] = useState<ApiPostType[]>([]);
