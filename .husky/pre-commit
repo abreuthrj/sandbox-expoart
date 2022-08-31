@@ -3,4 +3,4 @@
 
 npx prettier --write pages/*.{js,jsx,ts,tsx} components/*.{js,jsx,ts,tsx} store/*.{js,jsx,ts,tsx}
 yarn tsc
-yarn build
+yarn lint
