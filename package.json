@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "docker-compose up -d && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "migrate": "yarn prisma migrate dev",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "preinstall": "npx only-allow yarn",
+    "postinstall": "docker-compose build && yarn prisma init && yarn migrate dev && yarn prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.0.0",
