@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "yarn prisma migrate dev",
+    "migrate": "prisma migrate dev",
     "prepare": "husky install",
     "preinstall": "npx only-allow yarn",
-    "postinstall": "docker-compose build && yarn prisma init && yarn migrate dev && yarn prisma generate"
+    "postinstall": "docker-compose build && prisma init && migrate dev && prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.0.0",
