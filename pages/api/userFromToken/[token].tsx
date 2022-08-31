@@ -7,26 +7,38 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse<User | ErrorType>
 ) {
-  try {
-    if (!(req.query.token && typeof req.query.token == "string"))
-      throw "Token not sent";
+  if (!(req.query.token && typeof req.query.token == "string"))
+    return res.status(400).send({
+      error: true,
+      message: "Token not received",
+    });
 
-    const { token } = req.query;
+  const { token } = req.query;
+
+  try {
     const { id } = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
 
     const prismaClient = new PrismaClient();
+
     const user = await prismaClient.user.findFirst({
       where: {
-        id: id,
+        id,
       },
     });
 
-    if (user) return res.status(200).send(user);
+    if (!user)
+      return res.status(404).send({
+        error: true,
+        message: "User not found",
+      });
+
+    return res.status(200).send(user);
   } catch (err) {
-    return res.status(404).send({
+    console.log(err);
+
+    return res.status(500).send({
       error: true,
-      message: "User not found",
-      details: err,
+      message: "Something bad happened! Try again",
     });
   }
 }
